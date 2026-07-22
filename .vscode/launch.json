@@ -1,0 +1,26 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Flutter Frontend App",
+            "cwd": "${workspaceFolder}/frontend/frontend",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart"
+        },
+        {
+            "name": "Python FastAPI Backend",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/backend/run.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Backend Dashboard (localhost:8000/docs)",
+            "url": "http://localhost:8000/docs",
+            "webRoot": "${workspaceFolder}"
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+# Dependencies & Environment
+.venv/
+env/
+venv/
+git_portable/
+mingit.zip
+*.pyc
+__pycache__/
+
+# Flutter / Dart
+.dart_tool/
+.pub-cache/
+.pub/
+build/
+ephemeral/
+
+# IDE & OS Files
+.DS_Store
+Thumbs.db
+*.log
