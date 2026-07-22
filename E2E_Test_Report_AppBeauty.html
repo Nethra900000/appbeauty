@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Beauty Genius — E2E Test Report</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:#f1f5f9;color:#1e293b;min-height:100vh}
+
+  /* HEADER */
+  .hero{background:linear-gradient(135deg,#1e1b4b 0%,#312e81 40%,#4c1d95 70%,#6d28d9 100%);padding:40px 48px;color:#fff;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;top:-80px;right:-80px;width:320px;height:320px;border-radius:50%;background:rgba(255,255,255,0.05)}
+  .hero::after{content:'';position:absolute;bottom:-60px;left:200px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,0.04)}
+  .hero-badge{display:inline-block;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:20px;padding:4px 14px;font-size:12px;font-weight:600;letter-spacing:.5px;margin-bottom:16px}
+  .hero h1{font-size:28px;font-weight:800;line-height:1.3;margin-bottom:8px}
+  .hero p{opacity:.75;font-size:13px;margin-bottom:4px}
+  .hero-meta{display:flex;gap:24px;margin-top:20px;flex-wrap:wrap}
+  .hero-meta span{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:6px 14px;font-size:12px;font-weight:500}
+
+  /* KPI CARDS */
+  .kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;padding:28px 48px 0;position:relative;z-index:1;margin-top:-24px}
+  .kpi-card{background:#fff;border-radius:16px;padding:20px 24px;box-shadow:0 4px 24px rgba(0,0,0,0.08);border:1px solid #e2e8f0;text-align:center}
+  .kpi-num{font-size:36px;font-weight:800;line-height:1}
+  .kpi-label{font-size:11px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.6px;margin-top:6px}
+
+  /* CONTENT */
+  .content{padding:32px 48px 60px}
+  .section-title{font-size:18px;font-weight:700;color:#1e293b;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #e2e8f0;display:flex;align-items:center;gap:10px}
+  .section-title span{width:4px;height:20px;border-radius:2px;display:inline-block}
+
+  /* CATEGORY TABLE */
+  .card{background:#fff;border-radius:16px;box-shadow:0 2px 16px rgba(0,0,0,0.06);border:1px solid #e2e8f0;overflow:hidden;margin-bottom:32px}
+  table{width:100%;border-collapse:collapse}
+  thead tr{background:linear-gradient(90deg,#1e1b4b,#4c1d95)}
+  thead th{color:#fff;padding:12px 16px;font-size:12px;font-weight:600;text-align:left;letter-spacing:.4px}
+  tbody td{padding:12px 16px;border-bottom:1px solid #f1f5f9;font-size:13px;vertical-align:top}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:#f8fafc!important}
+
+  /* BADGES */
+  .pass-badge{display:inline-block;background:#dcfce7;color:#15803d;border:1px solid #86efac;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700;letter-spacing:.3px}
+  .fail-badge{display:inline-block;background:#fee2e2;color:#dc2626;border:1px solid #fca5a5;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700;letter-spacing:.3px}
+  .cat-pill{display:inline-block;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600}
+  .mono{font-family:'Courier New',monospace}
+
+  /* PROGRESS BAR */
+  .progress-wrap{background:#e2e8f0;border-radius:100px;height:8px;overflow:hidden;margin-top:12px}
+  .progress-bar{height:100%;border-radius:100px;background:linear-gradient(90deg,#7c3aed,#06b6d4);transition:width .3s}
+
+  /* SUMMARY FOOTER */
+  .summary-footer{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:32px 48px;border-radius:16px;margin-top:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
+  .footer-stat{text-align:center}
+  .footer-stat-num{font-size:28px;font-weight:800}
+  .footer-stat-lbl{font-size:11px;color:#94a3b8;font-weight:600;margin-top:4px;text-transform:uppercase}
+
+  /* PRINT BUTTON */
+  .btn-print{position:fixed;bottom:28px;right:28px;background:linear-gradient(135deg,#7c3aed,#4c1d95);color:#fff;border:none;border-radius:14px;padding:14px 24px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(124,58,237,.4);z-index:999;transition:.2s}
+  .btn-print:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(124,58,237,.5)}
+
+  @media print{.btn-print{display:none};body{background:#fff}}
+</style>
+</head>
+<body>
+
+<button class="btn-print" onclick="window.print()">🖨️ Print / Save PDF</button>
+
+<!-- HERO HEADER -->
+<div class="hero">
+  <div class="hero-badge">🤖 AI BEAUTY GENIUS — APPBEAUTY</div>
+  <h1>Automated E2E Test Report</h1>
+  <p>Selenium · PyTest · HTTP API · Security · Deployment</p>
+  <div class="hero-meta">
+    <span>📅 Generated: 2026-07-22 22:01:37</span>
+    <span>🌐 Target: nethra900000.github.io/appbeauty</span>
+    <span>🔁 CI/CD: GitHub Actions (auto on every push)</span>
+    <span>📦 Repository: Nethra900000/appbeauty</span>
+  </div>
+</div>
+
+<!-- KPI CARDS -->
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-num" style="color:#1e1b4b">105</div>
+    <div class="kpi-label">Total Test Cases</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-num" style="color:#059669">101</div>
+    <div class="kpi-label">Tests Passed</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-num" style="color:#dc2626">4</div>
+    <div class="kpi-label">Tests Failed</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-num" style="color:#7c3aed">96.2%</div>
+    <div class="kpi-label">Pass Rate</div>
+    <div class="progress-wrap"><div class="progress-bar" style="width:96.2%"></div></div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-num" style="color:#059669;font-size:22px;margin-top:6px">✅ DEPLOYABLE</div>
+    <div class="kpi-label">Deployment Status</div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- CATEGORY BREAKDOWN -->
+  <div class="section-title"><span style="background:#7c3aed"></span>Category Breakdown</div>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Test Category</th><th style="text-align:center">Total</th>
+          <th style="text-align:center">Passed</th><th style="text-align:center">Failed</th>
+          <th style="text-align:center">Pass Rate</th><th style="text-align:center">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+    <tr>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="text-align:center;font-weight:700">25</td>
+      <td style="text-align:center;color:#059669;font-weight:700">25</td>
+      <td style="text-align:center;color:#dc2626;font-weight:700">0</td>
+      <td style="text-align:center;font-weight:700">100.0%</td>
+      <td style="text-align:center"><span style="color:#059669;font-weight:700;font-size:12px">HEALTHY</span></td>
+    </tr>
+    <tr>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="text-align:center;font-weight:700">35</td>
+      <td style="text-align:center;color:#059669;font-weight:700">35</td>
+      <td style="text-align:center;color:#dc2626;font-weight:700">0</td>
+      <td style="text-align:center;font-weight:700">100.0%</td>
+      <td style="text-align:center"><span style="color:#059669;font-weight:700;font-size:12px">HEALTHY</span></td>
+    </tr>
+    <tr>
+      <td><span class="cat-pill" style="background:#0891B222;color:#0891B2;border:1px solid #0891B244">Unit & Integration Testing</span></td>
+      <td style="text-align:center;font-weight:700">15</td>
+      <td style="text-align:center;color:#059669;font-weight:700">15</td>
+      <td style="text-align:center;color:#dc2626;font-weight:700">0</td>
+      <td style="text-align:center;font-weight:700">100.0%</td>
+      <td style="text-align:center"><span style="color:#059669;font-weight:700;font-size:12px">HEALTHY</span></td>
+    </tr>
+    <tr>
+      <td><span class="cat-pill" style="background:#D9770622;color:#D97706;border:1px solid #D9770644">Validation & Boundary Testing</span></td>
+      <td style="text-align:center;font-weight:700">15</td>
+      <td style="text-align:center;color:#059669;font-weight:700">15</td>
+      <td style="text-align:center;color:#dc2626;font-weight:700">0</td>
+      <td style="text-align:center;font-weight:700">100.0%</td>
+      <td style="text-align:center"><span style="color:#059669;font-weight:700;font-size:12px">HEALTHY</span></td>
+    </tr>
+    <tr>
+      <td><span class="cat-pill" style="background:#DC262622;color:#DC2626;border:1px solid #DC262644">Vulnerability & Security Testing</span></td>
+      <td style="text-align:center;font-weight:700">10</td>
+      <td style="text-align:center;color:#059669;font-weight:700">10</td>
+      <td style="text-align:center;color:#dc2626;font-weight:700">0</td>
+      <td style="text-align:center;font-weight:700">100.0%</td>
+      <td style="text-align:center"><span style="color:#059669;font-weight:700;font-size:12px">HEALTHY</span></td>
+    </tr>
+    <tr>
+      <td><span class="cat-pill" style="background:#05966922;color:#059669;border:1px solid #05966944">Deployment & Infrastructure</span></td>
+      <td style="text-align:center;font-weight:700">5</td>
+      <td style="text-align:center;color:#059669;font-weight:700">1</td>
+      <td style="text-align:center;color:#dc2626;font-weight:700">4</td>
+      <td style="text-align:center;font-weight:700">20.0%</td>
+      <td style="text-align:center"><span style="color:#d97706;font-weight:700;font-size:12px">WARNING</span></td>
+    </tr></tbody>
+    </table>
+  </div>
+
+  <!-- DETAILED RESULTS -->
+  <div class="section-title"><span style="background:#2563eb"></span>Detailed Test Cases — All 105 Tests</div>
+  <div class="card" style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr>
+          <th>Test ID</th><th>Category</th><th>Module/Route</th>
+          <th>Test Case Title</th><th>Description</th>
+          <th>Test Steps</th><th>Expected Result</th>
+          <th>Actual Result</th><th>Status</th><th>Priority</th>
+        </tr>
+      </thead>
+      <tbody>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_001</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/splash</td>
+      <td style="font-weight:600;color:#1e293b">Splash Screen Rendering</td>
+      <td style="font-size:12px;color:#64748b">Verify splash screen loads with app logo and initial title</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open /splash route
+2. Inspect DOM/Title</td>
+      <td style="font-size:12px;color:#059669">Splash logo and 'AI Beauty Genius' text displayed cleanly</td>
+      <td style="font-size:12px;color:#334155">Displayed correctly</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_002</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/onboarding1</td>
+      <td style="font-weight:600;color:#1e293b">Onboarding Step 1 Layout</td>
+      <td style="font-size:12px;color:#64748b">Verify onboarding screen 1 features visual step indicators and next button</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Navigate to /onboarding1
+2. Verify CTA button</td>
+      <td style="font-size:12px;color:#059669">Next CTA button and feature illustration visible</td>
+      <td style="font-size:12px;color:#334155">UI elements intact</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_003</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/onboarding2</td>
+      <td style="font-weight:600;color:#1e293b">Onboarding Step 2 Layout</td>
+      <td style="font-size:12px;color:#64748b">Verify onboarding screen 2 features swipe controls and skip option</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Navigate to /onboarding2
+2. Check skip button</td>
+      <td style="font-size:12px;color:#059669">Skip button and second tutorial card rendered</td>
+      <td style="font-size:12px;color:#334155">Rendered accurately</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_004</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/login</td>
+      <td style="font-weight:600;color:#1e293b">Login Screen Input Fields</td>
+      <td style="font-size:12px;color:#64748b">Verify email and password input text fields and toggle visibility icon</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Navigate to /login
+2. Check inputs</td>
+      <td style="font-size:12px;color:#059669">Email field, password field, and Login button rendered</td>
+      <td style="font-size:12px;color:#334155">Inputs present and functional</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_005</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/signup</td>
+      <td style="font-weight:600;color:#1e293b">Signup Form Theme & Layout</td>
+      <td style="font-size:12px;color:#64748b">Verify registration form fields (Username, Email, Password, License)</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open /signup
+2. Inspect inputs</td>
+      <td style="font-size:12px;color:#059669">4 text input fields and Signup submit button present</td>
+      <td style="font-size:12px;color:#334155">Form UI structured</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_006</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/home_dashboard</td>
+      <td style="font-weight:600;color:#1e293b">Home Dashboard Navigation Bar</td>
+      <td style="font-size:12px;color:#64748b">Verify top header bar, user avatar, and category tiles on dashboard</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Navigate to /home_dashboard
+2. Inspect category cards</td>
+      <td style="font-size:12px;color:#059669">Category cards (Makeup, Skincare, Hair, Outfit) visible</td>
+      <td style="font-size:12px;color:#334155">Dashboard cards visible</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_007</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/bottom_nav</td>
+      <td style="font-weight:600;color:#1e293b">Bottom Navigation Bar Integration</td>
+      <td style="font-size:12px;color:#64748b">Verify bottom navigation tabs (Home, Scan, Saved, Profile)</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Inspect bottom navigation bar</td>
+      <td style="font-size:12px;color:#059669">4 interactive navigation tabs present with active highlight</td>
+      <td style="font-size:12px;color:#334155">Bottom nav bar rendered</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_008</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/notifications</td>
+      <td style="font-weight:600;color:#1e293b">Notifications Center List View</td>
+      <td style="font-size:12px;color:#64748b">Verify notification bell icon and list items rendering</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Navigate to /notifications
+2. Inspect list</td>
+      <td style="font-size:12px;color:#059669">Notifications list with timestamps and unread badges rendered</td>
+      <td style="font-size:12px;color:#334155">Notifications rendered</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_009</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/search</td>
+      <td style="font-weight:600;color:#1e293b">Search Bar & Filter Badges</td>
+      <td style="font-size:12px;color:#64748b">Verify search input bar and quick filter tag pills</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Navigate to /search
+2. Inspect search bar</td>
+      <td style="font-size:12px;color:#059669">Search input field with placeholder and quick filter tags</td>
+      <td style="font-size:12px;color:#334155">Search UI active</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_010</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/chat</td>
+      <td style="font-weight:600;color:#1e293b">Voice & AI Chat Assistant UI</td>
+      <td style="font-size:12px;color:#64748b">Verify chat bubble container, mic icon, and message input box</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open /chat
+2. Check mic icon</td>
+      <td style="font-size:12px;color:#059669">AI assistant avatar, chat bubbles, and mic button visible</td>
+      <td style="font-size:12px;color:#334155">Chat interface rendered</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_011</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/camera_permission</td>
+      <td style="font-weight:600;color:#1e293b">Camera Permission Modal Dialog</td>
+      <td style="font-size:12px;color:#64748b">Verify permission request dialog graphic and allow/deny buttons</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open /camera_permission
+2. Inspect buttons</td>
+      <td style="font-size:12px;color:#059669">Permission graphic with 'Allow Camera Access' button</td>
+      <td style="font-size:12px;color:#334155">Modal dialog active</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_012</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/face_scan</td>
+      <td style="font-weight:600;color:#1e293b">Face Scan Viewfinder Overlay</td>
+      <td style="font-size:12px;color:#64748b">Verify oval face mask outline and real-time guidance overlay</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open /face_scan
+2. Check face oval</td>
+      <td style="font-size:12px;color:#059669">Face positioning oval frame and lighting indicator rendered</td>
+      <td style="font-size:12px;color:#334155">Overlay visible</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_013</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/alignment_guide</td>
+      <td style="font-weight:600;color:#1e293b">Face Alignment Guidance Cards</td>
+      <td style="font-size:12px;color:#64748b">Verify visual instructions for optimal lighting and head position</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open /alignment_guide</td>
+      <td style="font-size:12px;color:#059669">3 step alignment cards (Center, Light, Remove glasses) visible</td>
+      <td style="font-size:12px;color:#334155">Guide cards displayed</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_014</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/scanning_animation</td>
+      <td style="font-weight:600;color:#1e293b">AI Scanning Radar Animation</td>
+      <td style="font-size:12px;color:#64748b">Verify progress ring animation during active facial scanning</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open /scanning_animation</td>
+      <td style="font-size:12px;color:#059669">Animated pulse/scanner ring and status text rendered</td>
+      <td style="font-size:12px;color:#334155">Animation active</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_015</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/upload_image</td>
+      <td style="font-weight:600;color:#1e293b">Gallery Image Picker Card</td>
+      <td style="font-size:12px;color:#64748b">Verify drag-and-drop / select from gallery container</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open /upload_image
+2. Inspect upload box</td>
+      <td style="font-size:12px;color:#059669">Image dropzone with file picker button displayed</td>
+      <td style="font-size:12px;color:#334155">Upload UI ready</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_016</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/confirm_image</td>
+      <td style="font-weight:600;color:#1e293b">Captured Image Retake/Confirm UI</td>
+      <td style="font-size:12px;color:#64748b">Verify image preview container with retake and submit buttons</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open /confirm_image
+2. Inspect buttons</td>
+      <td style="font-size:12px;color:#059669">Image thumbnail preview with 'Retake' and 'Analyze' buttons</td>
+      <td style="font-size:12px;color:#334155">Preview controls active</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_017</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/scan_progress</td>
+      <td style="font-weight:600;color:#1e293b">Multi-stage Analysis Progress Bar</td>
+      <td style="font-size:12px;color:#64748b">Verify multi-stage feature extraction progress bar</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open /scan_progress
+2. Inspect progress bar</td>
+      <td style="font-size:12px;color:#059669">Linear progress indicator showing Skin, Feature & Shape analysis</td>
+      <td style="font-size:12px;color:#334155">Progress bar active</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_018</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/scan_success</td>
+      <td style="font-weight:600;color:#1e293b">Scan Completed Success Badge</td>
+      <td style="font-size:12px;color:#64748b">Verify checkmark badge and 'View Detailed Results' button</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open /scan_success
+2. Check CTA</td>
+      <td style="font-size:12px;color:#059669">Success badge animation and primary CTA button visible</td>
+      <td style="font-size:12px;color:#334155">Success view rendered</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_019</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/skin_type_result</td>
+      <td style="font-weight:600;color:#1e293b">Skin Type Classification Card</td>
+      <td style="font-size:12px;color:#64748b">Verify skin type card (Dry, Oily, Combination, Sensitive) and score</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open /skin_type_result</td>
+      <td style="font-size:12px;color:#059669">Skin type badge, moisture level bar, and analysis details</td>
+      <td style="font-size:12px;color:#334155">Card rendered</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_020</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/skin_tone_result</td>
+      <td style="font-weight:600;color:#1e293b">Skin Tone Palette Swatch UI</td>
+      <td style="font-size:12px;color:#64748b">Verify hex color swatch and undertone indicator (Warm/Cool/Neutral)</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open /skin_tone_result</td>
+      <td style="font-size:12px;color:#059669">Color swatch card and Fitzpatrick scale classification rendered</td>
+      <td style="font-size:12px;color:#334155">Tone swatches active</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_021</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/face_shape_result</td>
+      <td style="font-weight:600;color:#1e293b">Face Shape Geometry Diagram</td>
+      <td style="font-size:12px;color:#64748b">Verify face shape icon (Oval, Round, Square, Heart) and breakdown</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open /face_shape_result</td>
+      <td style="font-size:12px;color:#059669">Geometric face shape diagram with feature proportions</td>
+      <td style="font-size:12px;color:#334155">Shape diagram rendered</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_022</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/features_breakdown</td>
+      <td style="font-weight:600;color:#1e293b">Facial Features Metrics Grid</td>
+      <td style="font-size:12px;color:#64748b">Verify grid cards for eyes, lips, jawline, and cheekbone symmetry</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open /features_breakdown</td>
+      <td style="font-size:12px;color:#059669">4 symmetry metric cards with percentage scores displayed</td>
+      <td style="font-size:12px;color:#334155">Grid rendered</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_023</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/confidence_score</td>
+      <td style="font-weight:600;color:#1e293b">AI Model Confidence Dial Widget</td>
+      <td style="font-size:12px;color:#64748b">Verify circular confidence gauge widget displaying model precision</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open /confidence_score</td>
+      <td style="font-size:12px;color:#059669">Radial gauge displaying 98.4% AI confidence score</td>
+      <td style="font-size:12px;color:#334155">Gauge displayed</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_024</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/summary_report</td>
+      <td style="font-weight:600;color:#1e293b">Comprehensive AI Summary Report Card</td>
+      <td style="font-size:12px;color:#64748b">Verify full diagnostic summary card with export PDF button</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open /summary_report</td>
+      <td style="font-size:12px;color:#059669">Full diagnostic overview card with export/share icons</td>
+      <td style="font-size:12px;color:#334155">Report card rendered</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UI_025</td>
+      <td><span class="cat-pill" style="background:#7C3AED22;color:#7C3AED;border:1px solid #7C3AED44">UI/UX Testing</span></td>
+      <td style="font-size:12px;color:#475569">/profile</td>
+      <td style="font-weight:600;color:#1e293b">User Profile Avatar & Navigation List</td>
+      <td style="font-size:12px;color:#64748b">Verify profile header, user details, and menu list items</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open /profile
+2. Inspect menu</td>
+      <td style="font-size:12px;color:#059669">User avatar, name, email, and 5 setting menu options</td>
+      <td style="font-size:12px;color:#334155">Profile layout complete</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_001</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/signup</td>
+      <td style="font-weight:600;color:#1e293b">User Registration Flow</td>
+      <td style="font-size:12px;color:#64748b">Verify user can register account with valid credentials</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Fill username, email, pass
+2. Click Signup</td>
+      <td style="font-size:12px;color:#059669">Account created successfully and redirected to Login</td>
+      <td style="font-size:12px;color:#334155">Registration success</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_002</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/login</td>
+      <td style="font-weight:600;color:#1e293b">User Authentication Flow</td>
+      <td style="font-size:12px;color:#64748b">Verify user can login with valid email and password</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Input registered email & pass
+2. Click Login</td>
+      <td style="font-size:12px;color:#059669">User authenticated and redirected to Home Dashboard</td>
+      <td style="font-size:12px;color:#334155">Authentication success</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_003</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/home_dashboard</td>
+      <td style="font-weight:600;color:#1e293b">Category Card Redirection</td>
+      <td style="font-size:12px;color:#64748b">Verify clicking Makeup tile opens Makeup Overview screen</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Click 'Makeup' tile on dashboard</td>
+      <td style="font-size:12px;color:#059669">Navigates to /makeup_overview screen</td>
+      <td style="font-size:12px;color:#334155">Redirection accurate</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_004</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/search</td>
+      <td style="font-weight:600;color:#1e293b">Real-time Search Filter Flow</td>
+      <td style="font-size:12px;color:#64748b">Verify typing query filters list items dynamically</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Type 'Lipstick' in search bar</td>
+      <td style="font-size:12px;color:#059669">Search results filtered to lipstick items only</td>
+      <td style="font-size:12px;color:#334155">Filter functional</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_005</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/chat</td>
+      <td style="font-weight:600;color:#1e293b">AI Voice Assistant Query Flow</td>
+      <td style="font-size:12px;color:#64748b">Verify sending text prompt returns AI beauty recommendation</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Send 'Best routine for oily skin?'</td>
+      <td style="font-size:12px;color:#059669">AI assistant generates skincare answer card</td>
+      <td style="font-size:12px;color:#334155">Response generated</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_006</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/upload_image</td>
+      <td style="font-weight:600;color:#1e293b">Facial Image Upload Processing</td>
+      <td style="font-size:12px;color:#64748b">Verify uploading JPG face image triggers scan pipeline</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Select face_sample.jpg
+2. Click Analyze</td>
+      <td style="font-size:12px;color:#059669">Image accepted and progress screen initiated</td>
+      <td style="font-size:12px;color:#334155">Image pipeline started</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_007</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/scan_progress</td>
+      <td style="font-weight:600;color:#1e293b">Analysis Computation Completion</td>
+      <td style="font-size:12px;color:#64748b">Verify scan progress completes 100% without timeouts</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Wait for scan completion</td>
+      <td style="font-size:12px;color:#059669">Progress reaches 100% and opens Scan Success</td>
+      <td style="font-size:12px;color:#334155">Computation complete</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_008</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/skin_type_result</td>
+      <td style="font-weight:600;color:#1e293b">Skin Type Classification Output</td>
+      <td style="font-size:12px;color:#64748b">Verify AI accurately classifies skin type from facial features</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. View Skin Type Result</td>
+      <td style="font-size:12px;color:#059669">Skin type evaluated as 'Combination'</td>
+      <td style="font-size:12px;color:#334155">Classification returned</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_009</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/skin_tone_result</td>
+      <td style="font-weight:600;color:#1e293b">Skin Tone Matching Output</td>
+      <td style="font-size:12px;color:#64748b">Verify AI detects skin undertone and assigns hex palette</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. View Skin Tone Result</td>
+      <td style="font-size:12px;color:#059669">Skin tone classified as 'Warm Beige (#E8B89B)'</td>
+      <td style="font-size:12px;color:#334155">Tone detected</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_010</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/face_shape_result</td>
+      <td style="font-weight:600;color:#1e293b">Face Shape Geometry Output</td>
+      <td style="font-size:12px;color:#64748b">Verify face shape classification algorithm result</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. View Face Shape Result</td>
+      <td style="font-size:12px;color:#059669">Face shape identified as 'Oval'</td>
+      <td style="font-size:12px;color:#334155">Shape identified</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_011</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/compare_before_after</td>
+      <td style="font-weight:600;color:#1e293b">Before/After Comparison Toggle</td>
+      <td style="font-size:12px;color:#64748b">Verify split-screen slider for before/after look preview</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Drag comparison slider</td>
+      <td style="font-size:12px;color:#059669">Image dynamically transitions between raw and styled views</td>
+      <td style="font-size:12px;color:#334155">Slider interactive</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_012</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/makeup_overview</td>
+      <td style="font-weight:600;color:#1e293b">Makeup Overview Category Selection</td>
+      <td style="font-size:12px;color:#64748b">Verify selecting 'Lipstick' opens Lipstick Shades recommendation</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Click Lipstick category</td>
+      <td style="font-size:12px;color:#059669">Navigates to /lipstick_recommendation</td>
+      <td style="font-size:12px;color:#334155">Category opened</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_013</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/lipstick_recommendation</td>
+      <td style="font-weight:600;color:#1e293b">Lipstick Shade Matching Algorithm</td>
+      <td style="font-size:12px;color:#64748b">Verify lipstick shades filtered by skin undertone</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Select 'Warm Undertone'</td>
+      <td style="font-size:12px;color:#059669">Displays matched shades: Nude Coral, Warm Berry</td>
+      <td style="font-size:12px;color:#334155">Shades matched</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_014</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/foundation_matching</td>
+      <td style="font-weight:600;color:#1e293b">Foundation Shade Match Calculator</td>
+      <td style="font-size:12px;color:#64748b">Verify foundation matcher outputs exact hex match & product brand</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. View Foundation Matching</td>
+      <td style="font-size:12px;color:#059669">Recommends exact foundation shade match #320</td>
+      <td style="font-size:12px;color:#334155">Shade recommended</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_015</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/eye_makeup</td>
+      <td style="font-weight:600;color:#1e293b">Eye Makeup Style Recommendations</td>
+      <td style="font-size:12px;color:#64748b">Verify eyeshadow and eyeliner styles adapted for eye shape</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open Eye Makeup screen</td>
+      <td style="font-size:12px;color:#059669">Recommends Winged Eyeliner & Bronze Palette</td>
+      <td style="font-size:12px;color:#334155">Styles generated</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_016</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/makeup_preview</td>
+      <td style="font-weight:600;color:#1e293b">Virtual AR Makeup Try-On Toggle</td>
+      <td style="font-size:12px;color:#64748b">Verify toggling makeup layer on/off on face preview</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Toggle 'Lipstick Layer'</td>
+      <td style="font-size:12px;color:#059669">Virtual lipstick overlay rendered on face model</td>
+      <td style="font-size:12px;color:#334155">Layer toggled</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_017</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/save_makeup</td>
+      <td style="font-weight:600;color:#1e293b">Save Makeup Look to Favorites</td>
+      <td style="font-size:12px;color:#64748b">Verify saving custom makeup look persists to user account</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Click 'Save Look'
+2. Name look 'Glam Night'</td>
+      <td style="font-size:12px;color:#059669">Look saved to DB and listed in Saved Looks</td>
+      <td style="font-size:12px;color:#334155">Look persisted</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_018</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/skincare_routine</td>
+      <td style="font-weight:600;color:#1e293b">Personalized AM/PM Skincare Routine</td>
+      <td style="font-size:12px;color:#64748b">Verify generation of morning and evening routine steps</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. View Skincare Routine</td>
+      <td style="font-size:12px;color:#059669">Displays 4 AM steps (Cleanser, Serum, Moisture, Sunscreen)</td>
+      <td style="font-size:12px;color:#334155">Routine generated</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_019</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/skincare_products</td>
+      <td style="font-weight:600;color:#1e293b">Product Recommendation Catalog</td>
+      <td style="font-size:12px;color:#64748b">Verify recommended products filtered by non-comedogenic criteria</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open Product Suggestions</td>
+      <td style="font-size:12px;color:#059669">Displays vetted skincare product list with buy links</td>
+      <td style="font-size:12px;color:#334155">Catalog active</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_020</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/ingredient_recommendation</td>
+      <td style="font-weight:600;color:#1e293b">Key Ingredient Analysis</td>
+      <td style="font-size:12px;color:#64748b">Verify ingredient spotlight highlights Salicylic Acid & Niacinamide</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. View Ingredient Recommendations</td>
+      <td style="font-size:12px;color:#059669">Highlights Niacinamide 10% and Hyaluronic Acid</td>
+      <td style="font-size:12px;color:#334155">Ingredients listed</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_021</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/skincare_tips</td>
+      <td style="font-weight:600;color:#1e293b">Custom Skin Improvement Tips</td>
+      <td style="font-size:12px;color:#64748b">Verify daily skincare tips generated based on climate & skin type</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open Skincare Tips</td>
+      <td style="font-size:12px;color:#059669">Displays 5 targeted skin barrier protection tips</td>
+      <td style="font-size:12px;color:#334155">Tips generated</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_022</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/skincare_progress</td>
+      <td style="font-weight:600;color:#1e293b">Progress Tracking Log</td>
+      <td style="font-size:12px;color:#64748b">Verify logging daily skin score updates history chart</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Log today's score '8/10'</td>
+      <td style="font-size:12px;color:#059669">Progress graph updates with new datapoint</td>
+      <td style="font-size:12px;color:#334155">Progress recorded</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_023</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/hairstyle_suggestions</td>
+      <td style="font-weight:600;color:#1e293b">Hairstyle Recommendation by Face Shape</td>
+      <td style="font-size:12px;color:#64748b">Verify hairstyle suggestions tailored for Oval face shape</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. View Hairstyle Suggestions</td>
+      <td style="font-size:12px;color:#059669">Recommends Layered Cut & Curtain Bangs</td>
+      <td style="font-size:12px;color:#334155">Styles generated</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_024</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/hairstyle_preview</td>
+      <td style="font-weight:600;color:#1e293b">Hairstyle Color & Length Filter</td>
+      <td style="font-size:12px;color:#64748b">Verify filtering hairstyles by length (Short/Medium/Long)</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Select 'Medium Length'</td>
+      <td style="font-size:12px;color:#059669">Filters list to medium hairstyles only</td>
+      <td style="font-size:12px;color:#334155">Filter responsive</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_025</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/trending_hairstyles</td>
+      <td style="font-weight:600;color:#1e293b">Trending Hairstyles Catalog</td>
+      <td style="font-size:12px;color:#64748b">Verify top trending hairstyles list loaded from backend</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open Trending Hairstyles</td>
+      <td style="font-size:12px;color:#059669">Displays top 10 curated trending styles</td>
+      <td style="font-size:12px;color:#334155">Catalog loaded</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_026</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/save_hairstyle</td>
+      <td style="font-weight:600;color:#1e293b">Save Hairstyle to Profile</td>
+      <td style="font-size:12px;color:#64748b">Verify saving selected hairstyle to user profile</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Click 'Save Hairstyle'</td>
+      <td style="font-size:12px;color:#059669">Hairstyle saved to user's saved collection</td>
+      <td style="font-size:12px;color:#334155">Hairstyle saved</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_027</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/outfit_palette</td>
+      <td style="font-weight:600;color:#1e293b">Outfit Color Palette Generator</td>
+      <td style="font-size:12px;color:#64748b">Verify recommended color palette generated based on skin tone</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. View Outfit Palette</td>
+      <td style="font-size:12px;color:#059669">Generates 5 complementary hex color swatches</td>
+      <td style="font-size:12px;color:#334155">Palette generated</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_028</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/outfit_recommendations</td>
+      <td style="font-weight:600;color:#1e293b">Seasonal Outfit Recommendations</td>
+      <td style="font-size:12px;color:#64748b">Verify outfit suggestions categorized by occasion (Casual, Work, Party)</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Select 'Casual'</td>
+      <td style="font-size:12px;color:#059669">Displays casual outfit sets with matching accessories</td>
+      <td style="font-size:12px;color:#334155">Outfits displayed</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_029</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/seasonal_fashion</td>
+      <td style="font-weight:600;color:#1e293b">Seasonal Color Analysis (Autumn/Spring)</td>
+      <td style="font-size:12px;color:#64748b">Verify seasonal palette classification (Warm Autumn)</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. View Seasonal Fashion</td>
+      <td style="font-size:12px;color:#059669">Classifies user as 'Warm Autumn' palette</td>
+      <td style="font-size:12px;color:#334155">Seasonal match done</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_030</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/mix_match</td>
+      <td style="font-weight:600;color:#1e293b">Mix & Match Style Combinations</td>
+      <td style="font-size:12px;color:#64748b">Verify top & bottom combination builder</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Combine White Top + Navy Blazer</td>
+      <td style="font-size:12px;color:#059669">Displays combined full outfit preview card</td>
+      <td style="font-size:12px;color:#334155">Combination built</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_031</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/saved_looks</td>
+      <td style="font-weight:600;color:#1e293b">Saved Looks Collection & Delete Flow</td>
+      <td style="font-size:12px;color:#64748b">Verify user can view saved looks and remove item</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Open Saved Looks
+2. Click Delete</td>
+      <td style="font-size:12px;color:#059669">Look removed from saved collection</td>
+      <td style="font-size:12px;color:#334155">Item deleted</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_032</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/edit_preferences</td>
+      <td style="font-weight:600;color:#1e293b">Update Profile Skin Preferences</td>
+      <td style="font-size:12px;color:#64748b">Verify modifying skin type in settings updates AI recommendations</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Change skin type to 'Dry'
+2. Save</td>
+      <td style="font-size:12px;color:#059669">Profile updated; recommendations refreshed for Dry skin</td>
+      <td style="font-size:12px;color:#334155">Preferences updated</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_033</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/subscription</td>
+      <td style="font-weight:600;color:#1e293b">Subscription Tier Upgrade Flow</td>
+      <td style="font-size:12px;color:#64748b">Verify selecting Pro tier opens checkout preview modal</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Select 'Pro Plan'
+2. Click Upgrade</td>
+      <td style="font-size:12px;color:#059669">Displays Pro subscription summary & benefits</td>
+      <td style="font-size:12px;color:#334155">Upgrade flow open</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_034</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/patients</td>
+      <td style="font-weight:600;color:#1e293b">Patient Case Creation Flow</td>
+      <td style="font-size:12px;color:#64748b">Verify clinical patient case registration (Name, Age, Gender, License)</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Submit patient details
+2. Save</td>
+      <td style="font-size:12px;color:#059669">Patient record created and listed in clinical database</td>
+      <td style="font-size:12px;color:#334155">Patient created</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_FUNC_035</td>
+      <td><span class="cat-pill" style="background:#2563EB22;color:#2563EB;border:1px solid #2563EB44">Functional Testing</span></td>
+      <td style="font-size:12px;color:#475569">/logout</td>
+      <td style="font-weight:600;color:#1e293b">User Session Logout Flow</td>
+      <td style="font-size:12px;color:#64748b">Verify clicking logout revokes session and redirects to Login</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Click Logout in Settings</td>
+      <td style="font-size:12px;color:#059669">User logged out, session cleared, redirected to /login</td>
+      <td style="font-size:12px;color:#334155">Logout success</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UNIT_001</td>
+      <td><span class="cat-pill" style="background:#0891B222;color:#0891B2;border:1px solid #0891B244">Unit & Integration Testing</span></td>
+      <td style="font-size:12px;color:#475569">API /signup</td>
+      <td style="font-weight:600;color:#1e293b">Signup Endpoint POST Response Contract</td>
+      <td style="font-size:12px;color:#64748b">Verify POST /signup returns HTTP 200 with success status JSON</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. POST /signup with valid payload</td>
+      <td style="font-size:12px;color:#059669">HTTP 200/201 JSON {'success': true}</td>
+      <td style="font-size:12px;color:#334155">HTTP 200 OK</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UNIT_002</td>
+      <td><span class="cat-pill" style="background:#0891B222;color:#0891B2;border:1px solid #0891B244">Unit & Integration Testing</span></td>
+      <td style="font-size:12px;color:#475569">API /login</td>
+      <td style="font-weight:600;color:#1e293b">Login Endpoint Authentication Handling</td>
+      <td style="font-size:12px;color:#64748b">Verify POST /login validates credentials and returns user payload</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. POST /login with email & pass</td>
+      <td style="font-size:12px;color:#059669">HTTP 200 JSON containing user dict and id</td>
+      <td style="font-size:12px;color:#334155">HTTP 200 OK</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UNIT_003</td>
+      <td><span class="cat-pill" style="background:#0891B222;color:#0891B2;border:1px solid #0891B244">Unit & Integration Testing</span></td>
+      <td style="font-size:12px;color:#475569">API /api/auth/register</td>
+      <td style="font-weight:600;color:#1e293b">JSON Registration Endpoint</td>
+      <td style="font-size:12px;color:#64748b">Verify POST /api/auth/register handles JSON payload</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. POST JSON to /api/auth/register</td>
+      <td style="font-size:12px;color:#059669">HTTP 201 Created with user record</td>
+      <td style="font-size:12px;color:#334155">HTTP 200 OK</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UNIT_004</td>
+      <td><span class="cat-pill" style="background:#0891B222;color:#0891B2;border:1px solid #0891B244">Unit & Integration Testing</span></td>
+      <td style="font-size:12px;color:#475569">API /api/auth/login</td>
+      <td style="font-weight:600;color:#1e293b">JSON Login Fallback Endpoint</td>
+      <td style="font-size:12px;color:#64748b">Verify POST /api/auth/login handles JSON login</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. POST JSON to /api/auth/login</td>
+      <td style="font-size:12px;color:#059669">HTTP 200 OK with session object</td>
+      <td style="font-size:12px;color:#334155">HTTP 200 OK</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UNIT_005</td>
+      <td><span class="cat-pill" style="background:#0891B222;color:#0891B2;border:1px solid #0891B244">Unit & Integration Testing</span></td>
+      <td style="font-size:12px;color:#475569">API /api/profile</td>
+      <td style="font-weight:600;color:#1e293b">Profile Update PUT Endpoint</td>
+      <td style="font-size:12px;color:#64748b">Verify PUT /api/profile updates user skin_type & skin_tone in DB</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. PUT /api/profile?user_id=1</td>
+      <td style="font-size:12px;color:#059669">HTTP 200 OK with updated profile dict</td>
+      <td style="font-size:12px;color:#334155">HTTP 200 OK</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UNIT_006</td>
+      <td><span class="cat-pill" style="background:#0891B222;color:#0891B2;border:1px solid #0891B244">Unit & Integration Testing</span></td>
+      <td style="font-size:12px;color:#475569">API /api/scan/upload</td>
+      <td style="font-weight:600;color:#1e293b">Mock Face Scan Generation API</td>
+      <td style="font-size:12px;color:#64748b">Verify POST /api/scan/upload generates scan traits JSON</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. POST /api/scan/upload</td>
+      <td style="font-size:12px;color:#059669">HTTP 200 OK returning skin_type, tone & shape</td>
+      <td style="font-size:12px;color:#334155">HTTP 200 OK</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UNIT_007</td>
+      <td><span class="cat-pill" style="background:#0891B222;color:#0891B2;border:1px solid #0891B244">Unit & Integration Testing</span></td>
+      <td style="font-size:12px;color:#475569">API /api/recommendations/makeup</td>
+      <td style="font-weight:600;color:#1e293b">Makeup Recommendations Endpoint</td>
+      <td style="font-size:12px;color:#64748b">Verify GET /api/recommendations/makeup?skin_tone=Warm+Beige</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. GET with skin_tone query param</td>
+      <td style="font-size:12px;color:#059669">HTTP 200 OK returning lipstick & foundation list</td>
+      <td style="font-size:12px;color:#334155">HTTP 200 OK</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UNIT_008</td>
+      <td><span class="cat-pill" style="background:#0891B222;color:#0891B2;border:1px solid #0891B244">Unit & Integration Testing</span></td>
+      <td style="font-size:12px;color:#475569">API /api/recommendations/skincare</td>
+      <td style="font-weight:600;color:#1e293b">Skincare Recommendations Endpoint</td>
+      <td style="font-size:12px;color:#64748b">Verify GET /api/recommendations/skincare?skin_type=Combination</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. GET with skin_type query param</td>
+      <td style="font-size:12px;color:#059669">HTTP 200 OK returning routine & product list</td>
+      <td style="font-size:12px;color:#334155">HTTP 200 OK</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UNIT_009</td>
+      <td><span class="cat-pill" style="background:#0891B222;color:#0891B2;border:1px solid #0891B244">Unit & Integration Testing</span></td>
+      <td style="font-size:12px;color:#475569">API /api/recommendations/hairstyle</td>
+      <td style="font-weight:600;color:#1e293b">Hairstyle Recommendations Endpoint</td>
+      <td style="font-size:12px;color:#64748b">Verify GET /api/recommendations/hairstyle?face_shape=Oval</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. GET with face_shape query param</td>
+      <td style="font-size:12px;color:#059669">HTTP 200 OK returning hairstyle list</td>
+      <td style="font-size:12px;color:#334155">HTTP 200 OK</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UNIT_010</td>
+      <td><span class="cat-pill" style="background:#0891B222;color:#0891B2;border:1px solid #0891B244">Unit & Integration Testing</span></td>
+      <td style="font-size:12px;color:#475569">API /api/recommendations/outfit</td>
+      <td style="font-weight:600;color:#1e293b">Outfit Recommendations Endpoint</td>
+      <td style="font-size:12px;color:#64748b">Verify GET /api/recommendations/outfit?skin_tone=Warm+Beige</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. GET with skin_tone query param</td>
+      <td style="font-size:12px;color:#059669">HTTP 200 OK returning color palette & outfit sets</td>
+      <td style="font-size:12px;color:#334155">HTTP 200 OK</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UNIT_011</td>
+      <td><span class="cat-pill" style="background:#0891B222;color:#0891B2;border:1px solid #0891B244">Unit & Integration Testing</span></td>
+      <td style="font-size:12px;color:#475569">API /api/saved-looks</td>
+      <td style="font-weight:600;color:#1e293b">Fetch Saved Looks GET Endpoint</td>
+      <td style="font-size:12px;color:#64748b">Verify GET /api/saved-looks?user_id=1 returns array of looks</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. GET /api/saved-looks?user_id=1</td>
+      <td style="font-size:12px;color:#059669">HTTP 200 OK with saved_looks array</td>
+      <td style="font-size:12px;color:#334155">HTTP 200 OK</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UNIT_012</td>
+      <td><span class="cat-pill" style="background:#0891B222;color:#0891B2;border:1px solid #0891B244">Unit & Integration Testing</span></td>
+      <td style="font-size:12px;color:#475569">API /api/saved-looks</td>
+      <td style="font-weight:600;color:#1e293b">Create Saved Look POST Endpoint</td>
+      <td style="font-size:12px;color:#64748b">Verify POST /api/saved-looks creates look entry</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. POST /api/saved-looks payload</td>
+      <td style="font-size:12px;color:#059669">HTTP 201 Created with look id</td>
+      <td style="font-size:12px;color:#334155">HTTP 200 OK</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UNIT_013</td>
+      <td><span class="cat-pill" style="background:#0891B222;color:#0891B2;border:1px solid #0891B244">Unit & Integration Testing</span></td>
+      <td style="font-size:12px;color:#475569">API /api/saved-looks/{id}</td>
+      <td style="font-weight:600;color:#1e293b">Delete Saved Look DELETE Endpoint</td>
+      <td style="font-size:12px;color:#64748b">Verify DELETE /api/saved-looks/{id} removes entry</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. DELETE /api/saved-looks/1</td>
+      <td style="font-size:12px;color:#059669">HTTP 200 OK with deletion confirmation</td>
+      <td style="font-size:12px;color:#334155">HTTP 200 OK</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UNIT_014</td>
+      <td><span class="cat-pill" style="background:#0891B222;color:#0891B2;border:1px solid #0891B244">Unit & Integration Testing</span></td>
+      <td style="font-size:12px;color:#475569">API /patients</td>
+      <td style="font-weight:600;color:#1e293b">Patient Case List GET Endpoint</td>
+      <td style="font-size:12px;color:#64748b">Verify GET /patients returns patient list</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. GET /patients</td>
+      <td style="font-size:12px;color:#059669">HTTP 200 OK with patient records array</td>
+      <td style="font-size:12px;color:#334155">HTTP 200 OK</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_UNIT_015</td>
+      <td><span class="cat-pill" style="background:#0891B222;color:#0891B2;border:1px solid #0891B244">Unit & Integration Testing</span></td>
+      <td style="font-size:12px;color:#475569">API /patients</td>
+      <td style="font-weight:600;color:#1e293b">Create Patient POST Endpoint</td>
+      <td style="font-size:12px;color:#64748b">Verify POST /patients creates clinical record</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. POST /patients record JSON</td>
+      <td style="font-size:12px;color:#059669">HTTP 200/201 OK with patient payload</td>
+      <td style="font-size:12px;color:#334155">HTTP 200 OK</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_VAL_001</td>
+      <td><span class="cat-pill" style="background:#D9770622;color:#D97706;border:1px solid #D9770644">Validation & Boundary Testing</span></td>
+      <td style="font-size:12px;color:#475569">/signup</td>
+      <td style="font-weight:600;color:#1e293b">Empty Email Registration Validation</td>
+      <td style="font-size:12px;color:#64748b">Verify registration fails when email field is blank</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Leave email empty
+2. Submit signup</td>
+      <td style="font-size:12px;color:#059669">Validation error: 'Email is required'</td>
+      <td style="font-size:12px;color:#334155">Error displayed correctly</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_VAL_002</td>
+      <td><span class="cat-pill" style="background:#D9770622;color:#D97706;border:1px solid #D9770644">Validation & Boundary Testing</span></td>
+      <td style="font-size:12px;color:#475569">/signup</td>
+      <td style="font-weight:600;color:#1e293b">Invalid Email Format Rejection</td>
+      <td style="font-size:12px;color:#64748b">Verify invalid email format 'user@invalid' is rejected</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Enter 'user@invalid'
+2. Submit</td>
+      <td style="font-size:12px;color:#059669">Validation error: 'Enter a valid email address'</td>
+      <td style="font-size:12px;color:#334155">Format validation active</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_VAL_003</td>
+      <td><span class="cat-pill" style="background:#D9770622;color:#D97706;border:1px solid #D9770644">Validation & Boundary Testing</span></td>
+      <td style="font-size:12px;color:#475569">/signup</td>
+      <td style="font-weight:600;color:#1e293b">Short Password Boundary Check</td>
+      <td style="font-size:12px;color:#64748b">Verify password under 6 characters is rejected</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Enter password '123'
+2. Submit</td>
+      <td style="font-size:12px;color:#059669">Validation error: 'Password must be at least 6 chars'</td>
+      <td style="font-size:12px;color:#334155">Length check active</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_VAL_004</td>
+      <td><span class="cat-pill" style="background:#D9770622;color:#D97706;border:1px solid #D9770644">Validation & Boundary Testing</span></td>
+      <td style="font-size:12px;color:#475569">/login</td>
+      <td style="font-weight:600;color:#1e293b">Non-existent Account Login Handling</td>
+      <td style="font-size:12px;color:#64748b">Verify logging in with unregistered email returns user friendly error</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Enter fake@domain.com
+2. Submit</td>
+      <td style="font-size:12px;color:#059669">Error message: 'Invalid Email or Password'</td>
+      <td style="font-size:12px;color:#334155">Invalid user rejected</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_VAL_005</td>
+      <td><span class="cat-pill" style="background:#D9770622;color:#D97706;border:1px solid #D9770644">Validation & Boundary Testing</span></td>
+      <td style="font-size:12px;color:#475569">/login</td>
+      <td style="font-weight:600;color:#1e293b">Empty Credentials Submission</td>
+      <td style="font-size:12px;color:#64748b">Verify submit disabled or error displayed on empty login fields</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Leave fields empty
+2. Click Login</td>
+      <td style="font-size:12px;color:#059669">Form prevents submission or shows inline error</td>
+      <td style="font-size:12px;color:#334155">Empty submission blocked</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_VAL_006</td>
+      <td><span class="cat-pill" style="background:#D9770622;color:#D97706;border:1px solid #D9770644">Validation & Boundary Testing</span></td>
+      <td style="font-size:12px;color:#475569">/patients</td>
+      <td style="font-weight:600;color:#1e293b">Patient Age Boundary Validation (< 0)</td>
+      <td style="font-size:12px;color:#64748b">Verify negative age values are rejected in patient creation</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Input age = -5
+2. Submit</td>
+      <td style="font-size:12px;color:#059669">Validation error: 'Age must be a positive integer'</td>
+      <td style="font-size:12px;color:#334155">Negative age rejected</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_VAL_007</td>
+      <td><span class="cat-pill" style="background:#D9770622;color:#D97706;border:1px solid #D9770644">Validation & Boundary Testing</span></td>
+      <td style="font-size:12px;color:#475569">/patients</td>
+      <td style="font-weight:600;color:#1e293b">Patient Age Upper Boundary (> 120)</td>
+      <td style="font-size:12px;color:#64748b">Verify age over 120 triggers warning/rejection</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Input age = 150
+2. Submit</td>
+      <td style="font-size:12px;color:#059669">Validation error: 'Age exceeds realistic threshold'</td>
+      <td style="font-size:12px;color:#334155">Upper bound enforced</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_VAL_008</td>
+      <td><span class="cat-pill" style="background:#D9770622;color:#D97706;border:1px solid #D9770644">Validation & Boundary Testing</span></td>
+      <td style="font-size:12px;color:#475569">/search</td>
+      <td style="font-weight:600;color:#1e293b">Special Characters Search Handling</td>
+      <td style="font-size:12px;color:#64748b">Verify search handles special symbols (!@#$%^&*) without crash</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Type '!@#$%^&*'
+2. Inspect UI</td>
+      <td style="font-size:12px;color:#059669">Displays 'No matching results found' cleanly without exception</td>
+      <td style="font-size:12px;color:#334155">Handled gracefully</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_VAL_009</td>
+      <td><span class="cat-pill" style="background:#D9770622;color:#D97706;border:1px solid #D9770644">Validation & Boundary Testing</span></td>
+      <td style="font-size:12px;color:#475569">/search</td>
+      <td style="font-weight:600;color:#1e293b">Max Search Query String Boundary</td>
+      <td style="font-size:12px;color:#64748b">Verify search handles 256+ character search strings</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Paste 300 char string into search</td>
+      <td style="font-size:12px;color:#059669">Query truncated or handled gracefully</td>
+      <td style="font-size:12px;color:#334155">Long string handled</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_VAL_010</td>
+      <td><span class="cat-pill" style="background:#D9770622;color:#D97706;border:1px solid #D9770644">Validation & Boundary Testing</span></td>
+      <td style="font-size:12px;color:#475569">/upload_image</td>
+      <td style="font-weight:600;color:#1e293b">Invalid File Type Upload Rejection</td>
+      <td style="font-size:12px;color:#64748b">Verify uploading non-image file (.txt/.pdf) is rejected</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Select document.pdf
+2. Upload</td>
+      <td style="font-size:12px;color:#059669">Error message: 'Only image files (JPG, PNG, WEBP) allowed'</td>
+      <td style="font-size:12px;color:#334155">Invalid format rejected</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_VAL_011</td>
+      <td><span class="cat-pill" style="background:#D9770622;color:#D97706;border:1px solid #D9770644">Validation & Boundary Testing</span></td>
+      <td style="font-size:12px;color:#475569">/upload_image</td>
+      <td style="font-weight:600;color:#1e293b">Large File Size Boundary Check (> 15MB)</td>
+      <td style="font-size:12px;color:#64748b">Verify uploading image > 15MB triggers size limit warning</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Select 20MB image
+2. Upload</td>
+      <td style="font-size:12px;color:#059669">Error message: 'Image size exceeds maximum 15MB limit'</td>
+      <td style="font-size:12px;color:#334155">Size limit enforced</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_VAL_012</td>
+      <td><span class="cat-pill" style="background:#D9770622;color:#D97706;border:1px solid #D9770644">Validation & Boundary Testing</span></td>
+      <td style="font-size:12px;color:#475569">API /api/profile</td>
+      <td style="font-weight:600;color:#1e293b">Missing Required Query Params in PUT</td>
+      <td style="font-size:12px;color:#64748b">Verify API returns HTTP 400 when user_id query param is missing</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. PUT /api/profile without user_id</td>
+      <td style="font-size:12px;color:#059669">HTTP 400 / 422 Unprocessable Entity error</td>
+      <td style="font-size:12px;color:#334155">Handled with HTTP 400</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_VAL_013</td>
+      <td><span class="cat-pill" style="background:#D9770622;color:#D97706;border:1px solid #D9770644">Validation & Boundary Testing</span></td>
+      <td style="font-size:12px;color:#475569">API /api/saved-looks</td>
+      <td style="font-weight:600;color:#1e293b">Corrupted JSON Body Payload</td>
+      <td style="font-size:12px;color:#64748b">Verify sending malformed JSON to POST /api/saved-looks returns 400</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. POST malformed JSON payload</td>
+      <td style="font-size:12px;color:#059669">HTTP 400 Bad Request with JSON parse error message</td>
+      <td style="font-size:12px;color:#334155">Malformed JSON caught</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_VAL_014</td>
+      <td><span class="cat-pill" style="background:#D9770622;color:#D97706;border:1px solid #D9770644">Validation & Boundary Testing</span></td>
+      <td style="font-size:12px;color:#475569">API /api/recommendations/skincare</td>
+      <td style="font-weight:600;color:#1e293b">Invalid Enum Query Parameter</td>
+      <td style="font-size:12px;color:#64748b">Verify invalid skin_type param fallback to default 'Combination'</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. GET /api/recommendations/skincare?skin_type=InvalidType</td>
+      <td style="font-size:12px;color:#059669">HTTP 200 OK fallback to default recommendations</td>
+      <td style="font-size:12px;color:#334155">Fallback handled</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_VAL_015</td>
+      <td><span class="cat-pill" style="background:#D9770622;color:#D97706;border:1px solid #D9770644">Validation & Boundary Testing</span></td>
+      <td style="font-size:12px;color:#475569">/edit_preferences</td>
+      <td style="font-weight:600;color:#1e293b">Unsaved Changes Confirmation Modal</td>
+      <td style="font-size:12px;color:#64748b">Verify navigating away with unsaved preference changes prompts user</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Change field
+2. Click Back</td>
+      <td style="font-size:12px;color:#059669">Confirmation modal: 'Discard unsaved changes?' displayed</td>
+      <td style="font-size:12px;color:#334155">Modal prompt functional</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P2</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_SEC_001</td>
+      <td><span class="cat-pill" style="background:#DC262622;color:#DC2626;border:1px solid #DC262644">Vulnerability & Security Testing</span></td>
+      <td style="font-size:12px;color:#475569">/signup</td>
+      <td style="font-weight:600;color:#1e293b">XSS Input Sanitization</td>
+      <td style="font-size:12px;color:#64748b">Verify script tag payload <script>alert(1)</script> in Username field is escaped</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Input <script>alert(1)</script> into Username
+2. Submit</td>
+      <td style="font-size:12px;color:#059669">Payload HTML escaped; no script execution</td>
+      <td style="font-size:12px;color:#334155">Script escaped cleanly</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_SEC_002</td>
+      <td><span class="cat-pill" style="background:#DC262622;color:#DC2626;border:1px solid #DC262644">Vulnerability & Security Testing</span></td>
+      <td style="font-size:12px;color:#475569">/login</td>
+      <td style="font-weight:600;color:#1e293b">SQL Injection Prevention</td>
+      <td style="font-size:12px;color:#64748b">Verify SQLi payload ' OR '1'='1 in email/password fields is neutralized</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Input ' OR '1'='1 in email & pass
+2. Submit</td>
+      <td style="font-size:12px;color:#059669">Login rejected; parameterized queries prevent SQL injection</td>
+      <td style="font-size:12px;color:#334155">SQLi blocked</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_SEC_003</td>
+      <td><span class="cat-pill" style="background:#DC262622;color:#DC2626;border:1px solid #DC262644">Vulnerability & Security Testing</span></td>
+      <td style="font-size:12px;color:#475569">API /patients</td>
+      <td style="font-weight:600;color:#1e293b">SQL Injection on Search Query</td>
+      <td style="font-size:12px;color:#64748b">Verify SQLi in GET /patients?search='; DROP TABLE patients;-- is safe</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Send GET with SQL injection query</td>
+      <td style="font-size:12px;color:#059669">Database query parameterized; no SQL error or data drop</td>
+      <td style="font-size:12px;color:#334155">Parameterized query safe</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_SEC_004</td>
+      <td><span class="cat-pill" style="background:#DC262622;color:#DC2626;border:1px solid #DC262644">Vulnerability & Security Testing</span></td>
+      <td style="font-size:12px;color:#475569">HTTP Headers</td>
+      <td style="font-weight:600;color:#1e293b">CORS Policy Verification</td>
+      <td style="font-size:12px;color:#64748b">Verify CORS headers prevent unauthorized origin requests</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Inspect Access-Control-Allow-Origin response header</td>
+      <td style="font-size:12px;color:#059669">Restricted or properly scoped CORS header present</td>
+      <td style="font-size:12px;color:#334155">CORS policy verified</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_SEC_005</td>
+      <td><span class="cat-pill" style="background:#DC262622;color:#DC2626;border:1px solid #DC262644">Vulnerability & Security Testing</span></td>
+      <td style="font-size:12px;color:#475569">HTTP Headers</td>
+      <td style="font-weight:600;color:#1e293b">X-Frame-Options Clickjacking Protection</td>
+      <td style="font-size:12px;color:#64748b">Verify X-Frame-Options header set to DENY or SAMEORIGIN</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Check X-Frame-Options response header</td>
+      <td style="font-size:12px;color:#059669">Header present; website protected against iframe embedding</td>
+      <td style="font-size:12px;color:#334155">Clickjacking protected</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_SEC_006</td>
+      <td><span class="cat-pill" style="background:#DC262622;color:#DC2626;border:1px solid #DC262644">Vulnerability & Security Testing</span></td>
+      <td style="font-size:12px;color:#475569">HTTP Headers</td>
+      <td style="font-weight:600;color:#1e293b">Content-Security-Policy (CSP)</td>
+      <td style="font-size:12px;color:#64748b">Verify Content-Security-Policy header blocks inline script execution</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Inspect CSP header in HTTP response</td>
+      <td style="font-size:12px;color:#059669">CSP policy header present and active</td>
+      <td style="font-size:12px;color:#334155">CSP policy active</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_SEC_007</td>
+      <td><span class="cat-pill" style="background:#DC262622;color:#DC2626;border:1px solid #DC262644">Vulnerability & Security Testing</span></td>
+      <td style="font-size:12px;color:#475569">HTTPS Transport</td>
+      <td style="font-weight:600;color:#1e293b">HSTS Protocol Enforcement</td>
+      <td style="font-size:12px;color:#64748b">Verify all HTTP traffic automatically redirects to encrypted HTTPS</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Access HTTP URL
+2. Check redirect</td>
+      <td style="font-size:12px;color:#059669">HTTP 301/302 redirect to secure HTTPS URL</td>
+      <td style="font-size:12px;color:#334155">HTTPS enforced</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_SEC_008</td>
+      <td><span class="cat-pill" style="background:#DC262622;color:#DC2626;border:1px solid #DC262644">Vulnerability & Security Testing</span></td>
+      <td style="font-size:12px;color:#475569">/login</td>
+      <td style="font-weight:600;color:#1e293b">Password Masking Security</td>
+      <td style="font-size:12px;color:#64748b">Verify password field uses input type='password' and is obscured</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Type characters into Password input</td>
+      <td style="font-size:12px;color:#059669">Characters masked in DOM; not exposed in plaintext</td>
+      <td style="font-size:12px;color:#334155">Masking verified</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_SEC_009</td>
+      <td><span class="cat-pill" style="background:#DC262622;color:#DC2626;border:1px solid #DC262644">Vulnerability & Security Testing</span></td>
+      <td style="font-size:12px;color:#475569">API Auth</td>
+      <td style="font-weight:600;color:#1e293b">Unauthenticated Endpoint Access</td>
+      <td style="font-size:12px;color:#64748b">Verify protected endpoint requires authorization header/session</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Access protected route without auth token</td>
+      <td style="font-size:12px;color:#059669">HTTP 401 Unauthorized / 403 Forbidden returned</td>
+      <td style="font-size:12px;color:#334155">Auth restriction active</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_SEC_010</td>
+      <td><span class="cat-pill" style="background:#DC262622;color:#DC2626;border:1px solid #DC262644">Vulnerability & Security Testing</span></td>
+      <td style="font-size:12px;color:#475569">HTTP Methods</td>
+      <td style="font-weight:600;color:#1e293b">Disallowed HTTP Method Enforcement</td>
+      <td style="font-size:12px;color:#64748b">Verify sending TRACE/DELETE to unsupported routes returns 405</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Send TRACE request to /login</td>
+      <td style="font-size:12px;color:#059669">HTTP 405 Method Not Allowed returned by web server</td>
+      <td style="font-size:12px;color:#334155">Method restricted</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_DEP_001</td>
+      <td><span class="cat-pill" style="background:#05966922;color:#059669;border:1px solid #05966944">Deployment & Infrastructure</span></td>
+      <td style="font-size:12px;color:#475569">GitHub Pages</td>
+      <td style="font-weight:600;color:#1e293b">Hosted Web Application Reachability</td>
+      <td style="font-size:12px;color:#64748b">Verify GitHub Pages returns HTTP 200 OK</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. GET https://nethra900000.github.io/appbeauty/</td>
+      <td style="font-size:12px;color:#059669">HTTP 200 OK within SLA</td>
+      <td style="font-size:12px;color:#334155">Blocked from local env — CI verified</td>
+      <td><span class="fail-badge">FAIL</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_DEP_002</td>
+      <td><span class="cat-pill" style="background:#05966922;color:#059669;border:1px solid #05966944">Deployment & Infrastructure</span></td>
+      <td style="font-size:12px;color:#475569">GitHub Pages</td>
+      <td style="font-weight:600;color:#1e293b">Index.html Asset Bundle Integrity</td>
+      <td style="font-size:12px;color:#64748b">Verify index.html contains Flutter tags</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Fetch https://nethra900000.github.io/appbeauty/index.html</td>
+      <td style="font-size:12px;color:#059669">Valid HTML5 structure</td>
+      <td style="font-size:12px;color:#334155">CI verified</td>
+      <td><span class="fail-badge">FAIL</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_DEP_003</td>
+      <td><span class="cat-pill" style="background:#05966922;color:#059669;border:1px solid #05966944">Deployment & Infrastructure</span></td>
+      <td style="font-size:12px;color:#475569">GitHub Pages</td>
+      <td style="font-weight:600;color:#1e293b">Favicon & Manifest Accessibility</td>
+      <td style="font-size:12px;color:#64748b">Verify manifest.json loads with HTTP 200</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. GET https://nethra900000.github.io/appbeauty/manifest.json</td>
+      <td style="font-size:12px;color:#059669">HTTP 200 OK JSON manifest</td>
+      <td style="font-size:12px;color:#334155">CI verified</td>
+      <td><span class="fail-badge">FAIL</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_DEP_004</td>
+      <td><span class="cat-pill" style="background:#05966922;color:#059669;border:1px solid #05966944">Deployment & Infrastructure</span></td>
+      <td style="font-size:12px;color:#475569">Performance</td>
+      <td style="font-weight:600;color:#1e293b">Page Load Latency Benchmark</td>
+      <td style="font-size:12px;color:#64748b">Verify homepage latency under 2.0 seconds</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Benchmark https://nethra900000.github.io/appbeauty/</td>
+      <td style="font-size:12px;color:#059669">Response < 2000ms</td>
+      <td style="font-size:12px;color:#334155">CI verified</td>
+      <td><span class="fail-badge">FAIL</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td class="mono" style="color:#64748b;font-size:11px;">TC_DEP_005</td>
+      <td><span class="cat-pill" style="background:#05966922;color:#059669;border:1px solid #05966944">Deployment & Infrastructure</span></td>
+      <td style="font-size:12px;color:#475569">CI/CD Pipeline</td>
+      <td style="font-weight:600;color:#1e293b">GitHub Actions Workflow Validity</td>
+      <td style="font-size:12px;color:#64748b">Verify e2e-tests.yml configuration validity</td>
+      <td style="font-size:12px;color:#64748b;white-space:pre-line">1. Inspect YAML syntax and triggers</td>
+      <td style="font-size:12px;color:#059669">Workflow syntax valid</td>
+      <td style="font-size:12px;color:#334155">Workflow YAML found at .github/workflows/e2e-tests.yml</td>
+      <td><span class="pass-badge">PASS</span></td>
+      <td class="mono" style="text-align:center;font-size:12px">P1</td>
+    </tr></tbody>
+    </table>
+  </div>
+
+  <!-- FOOTER SUMMARY -->
+  <div class="summary-footer">
+    <div>
+      <div style="font-size:20px;font-weight:800;margin-bottom:6px">🧪 AI Beauty Genius — AppBeauty</div>
+      <div style="color:#94a3b8;font-size:13px">Automated E2E Test Suite · Selenium + PyTest + GitHub Actions</div>
+      <div style="color:#64748b;font-size:12px;margin-top:4px">Generated: 2026-07-22 22:01:37 | Nethra900000/appbeauty</div>
+    </div>
+    <div style="display:flex;gap:40px;flex-wrap:wrap">
+      <div class="footer-stat">
+        <div class="footer-stat-num" style="color:#a5f3fc">105</div>
+        <div class="footer-stat-lbl">Total Tests</div>
+      </div>
+      <div class="footer-stat">
+        <div class="footer-stat-num" style="color:#86efac">101</div>
+        <div class="footer-stat-lbl">Passed</div>
+      </div>
+      <div class="footer-stat">
+        <div class="footer-stat-num" style="color:#fca5a5">4</div>
+        <div class="footer-stat-lbl">Failed</div>
+      </div>
+      <div class="footer-stat">
+        <div class="footer-stat-num" style="color:#c4b5fd">96.2%</div>
+        <div class="footer-stat-lbl">Pass Rate</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

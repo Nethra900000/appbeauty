@@ -9,7 +9,7 @@ on:
 
 jobs:
   e2e-testing:
-    name: Run 100+ Selenium E2E, Vulnerability & Unit Test Cases
+    name: Run 105 E2E, Vulnerability, Unit & Deployment Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -22,7 +22,7 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
 
-      - name: Install Google Chrome & Headless Chrome Dependencies
+      - name: Install Chrome & Headless Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y wget curl unzip libxi6 libgconf-2-4 libnss3 chromium-browser
@@ -32,7 +32,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r tests/requirements.txt
 
-      - name: Execute Automated Test Suite (100+ Test Cases)
+      - name: Execute Automated Test Suite (105 Test Cases)
         env:
           APP_URL: "https://nethra900000.github.io/appbeauty/"
           API_URL: "https://facial-face.onrender.com"
@@ -40,11 +40,26 @@ jobs:
         run: |
           python tests/test_suite.py
 
-      - name: Upload Excel Test Report Artifact (.xlsx)
+      - name: Generate HTML Test Report
+        env:
+          APP_URL: "https://nethra900000.github.io/appbeauty/"
+          API_URL: "https://facial-face.onrender.com"
+          PYTHONPATH: "tests"
+        run: |
+          python tests/generate_html_report.py
+
+      - name: Upload Excel Report (.xlsx)
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: E2E_Test_Report_AppBeauty_Excel
-          path: |
-            E2E_Test_Report_AppBeauty*.xlsx
+          name: E2E_Test_Report_Excel_XLSX
+          path: E2E_Test_Report_AppBeauty*.xlsx
+          retention-days: 30
+
+      - name: Upload HTML Report (Open in Browser)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: E2E_Test_Report_HTML_Browser
+          path: E2E_Test_Report_AppBeauty.html
           retention-days: 30
