@@ -68,9 +68,9 @@ jobs:
       - name: Print Test Summary
         if: always()
         run: |
-          echo "=============================================="
-          echo "  AI BEAUTY GENIUS - TEST SUITE COMPLETE"
-          echo "  300 Test Cases Executed"
-          echo "  Categories: UI/UX | Functional | Unit/API"
-          echo "             Validation | Security | Deployment"
-          echo "=============================================="
+          echo -e "\e[32m==============================================\e[0m"
+          echo -e "\e[32m  AI BEAUTY GENIUS - TEST SUITE COMPLETE\e[0m"
+          echo -e "\e[32m  300 Test Cases Executed\e[0m"
+          echo -e "\e[32m  Categories: UI/UX | Functional | Unit/API\e[0m"
+          echo -e "\e[32m             Validation | Security | Deployment\e[0m"
+          echo -e "\e[32m==============================================\e[0m"
