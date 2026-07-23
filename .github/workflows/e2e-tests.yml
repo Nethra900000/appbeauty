@@ -7,6 +7,11 @@ on:
     branches: [ main, master ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   e2e-testing:
     name: web app solenium testing
@@ -65,6 +70,19 @@ jobs:
           path: E2E_Test_Report_AppBeauty.html
           retention-days: 30
 
+      # We need to rename the report to index.html for it to serve correctly on Pages
+      - name: Setup HTML for Pages
+        if: always()
+        run: |
+          mkdir -p public
+          cp E2E_Test_Report_AppBeauty.html public/index.html
+
+      - name: Upload Pages Artifact
+        if: always()
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
       - name: Print Test Summary
         if: always()
         run: |
@@ -74,3 +92,16 @@ jobs:
           echo -e "\e[32m  Categories: UI/UX | Functional | Unit/API\e[0m"
           echo -e "\e[32m             Validation | Security | Deployment\e[0m"
           echo -e "\e[32m==============================================\e[0m"
+
+  deploy-pages:
+    name: Deploy Test Report to GitHub Pages
+    needs: e2e-testing
+    if: always()
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
