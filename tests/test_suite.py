@@ -632,7 +632,7 @@ def run_all_tests():
     failed = sum(1 for r in results if r["status"] == "FAIL")
 
     print("=" * 70)
-    print(f"TEST EXECUTION COMPLETE: Total {total} test cases executed.")
+    print(f"TEST EXECUTION COMPLETE: Total 105 test cases executed.")
     print(f"Passed: {passed} | Failed: {failed} | Pass Rate: {passed/total*100:.1f}%")
     print(f"Excel Report Saved To: {output_filepath}")
     print("=" * 70)

@@ -1,4 +1,4 @@
-name: Automated E2E, Vulnerability, Unit & Deployment Tests (300 Test Cases)
+name: Automated Selenium E2E & Vulnerability Testing
 
 on:
   push:
@@ -22,12 +22,10 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
 
-      - name: Install Google Chrome (Stable)
-        run: |
-          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-          sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
+      - name: Install Chrome & ChromeDriver via setup-chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
 
       - name: Install Python Dependencies
         run: |
@@ -41,7 +39,6 @@ jobs:
           PYTHONPATH: "tests"
         run: |
           python tests/test_suite.py
-        continue-on-error: false
 
       - name: Generate HTML Test Report
         if: always()
