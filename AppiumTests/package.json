@@ -1,0 +1,29 @@
+{
+  "name": "ai-beauty-genius-appium-tests",
+  "version": "1.0.0",
+  "description": "AI Beauty Genius Android Mobile E2E Appium Test Suite — 1,111 Tests",
+  "private": true,
+  "scripts": {
+    "test": "node node_modules/@wdio/cli/bin/wdio.js run wdio.conf.js",
+    "test:ci": "WDIO_CI_SPEC=tests/mega_android_1111.test.js node node_modules/@wdio/cli/bin/wdio.js run wdio.conf.js",
+    "report": "node utils/generateHtmlReport.js",
+    "fallback": "node utils/generateFallbackReport.js"
+  },
+  "dependencies": {
+    "@wdio/appium-service": "^9.0.0",
+    "@wdio/cli": "^9.0.0",
+    "@wdio/local-runner": "^9.0.0",
+    "@wdio/mocha-framework": "^9.0.0",
+    "@wdio/spec-reporter": "^9.0.0",
+    "appium": "^2.11.0",
+    "appium-uiautomator2-driver": "^3.5.0",
+    "exceljs": "^4.4.0",
+    "webdriverio": "^9.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^10.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
