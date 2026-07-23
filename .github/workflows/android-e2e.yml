@@ -1,4 +1,4 @@
-name: solenium test for android app
+name: appium test for android app
 
 on:
   push:
@@ -19,7 +19,7 @@ concurrency:
 jobs:
   # ── Job 1: Run Appium Tests in Android Emulator ──────────────────────────
   android-appium-tests:
-    name: web app solenium testing (Android)
+    name: web app appium testing (Android)
     runs-on: ubuntu-latest
     timeout-minutes: 90
 
