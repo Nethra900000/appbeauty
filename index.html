@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Beauty Genius - Interactive 50-Screen Desktop Website Experience</title>
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="showcase-dark">
+    <!-- Background glows -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+
+    <!-- Main Container -->
+    <div class="showcase-container">
+        <!-- Interactive Desktop Web Header (Hidden on splash/onboarding/auth by app.js) -->
+        <header class="desktop-nav-header" id="desktop-nav-header">
+            <div class="nav-logo" onclick="goToScreen(6)">
+                <span class="logo-sparkle">✦</span>
+                <div class="logo-text-group">
+                    <h1>AI BEAUTY GENIUS</h1>
+                    <p>Intelligent Styling Portal</p>
+                </div>
+            </div>
+            <nav class="desktop-nav-links">
+                <a href="#" class="nav-link" id="nav-link-dashboard" onclick="goToScreen(6); return false;">Dashboard</a>
+                <a href="#" class="nav-link" id="nav-link-scan" onclick="goToScreen(11); return false;">AI Face Scanner</a>
+                <a href="#" class="nav-link" id="nav-link-makeup" onclick="goToScreen(26); return false;">Makeup Hub</a>
+                <a href="#" class="nav-link" id="nav-link-skincare" onclick="goToScreen(32); return false;">Skincare AM/PM</a>
+                <a href="#" class="nav-link" id="nav-link-hair" onclick="goToScreen(37); return false;">Hairstyles</a>
+                <a href="#" class="nav-link" id="nav-link-outfits" onclick="goToScreen(41); return false;">Color & Outfits</a>
+                <a href="#" class="nav-link" id="nav-link-profile" onclick="goToScreen(46); return false;">Profile</a>
+            </nav>
+            <div class="nav-actions">
+                <button class="nav-vip-btn" onclick="goToScreen(50)">👑 Upgrade VIP</button>
+                <div class="nav-profile-trigger" onclick="goToScreen(46)">
+                    <div class="user-avatar-mini-nav" id="nav-avatar-img"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Workspace Layout -->
+        <main class="showcase-main">
+            <!-- Full-Width Responsive Page Viewport -->
+            <section class="viewport-column">
+                <div class="web-screen-canvas" id="phone-screen-viewport">
+                    <!-- Content will be dynamically rendered by app.js -->
+                </div>
+            </section>
+
+            <!-- Collapsible Control Panel Sidebar Drawer -->
+            <section class="control-column hidden" id="control-sidebar">
+                <!-- Navigation Tabs -->
+                <div class="control-tabs">
+                    <button class="tab-btn active" data-tab="screens-tab">Screens Explorer (50)</button>
+                    <button class="tab-btn" data-tab="design-tab">Design System</button>
+                    <button class="tab-btn" data-tab="sandbox-tab">AI Config Panel</button>
+                </div>
+
+                <!-- Tab Content: Screen Explorer -->
+                <div class="tab-pane active" id="screens-tab">
+                    <div class="search-filter-box">
+                        <input type="text" id="screen-search" placeholder="Search screens (e.g. Skin, Makeup, Onboarding)..." />
+                        <span class="search-icon">🔍</span>
+                    </div>
+
+                    <div class="screen-sections-list">
+                        <!-- Category 1: Authentication -->
+                        <div class="category-card" data-category="auth">
+                            <div class="category-header">
+                                <h3>AUTHENTICATION</h3>
+                            </div>
+                            <ul class="screen-links">
+                                <li data-index="1" class="active"><span>Splash Screen</span> <span class="arrow">→</span></li>
+                                <li data-index="2"><span>Onboarding (Intro)</span> <span class="arrow">→</span></li>
+                                <li data-index="3"><span>Onboarding (Features)</span> <span class="arrow">→</span></li>
+                                <li data-index="4"><span>Login Screen</span> <span class="arrow">→</span></li>
+                                <li data-index="5"><span>Signup Screen</span> <span class="arrow">→</span></li>
+                            </ul>
+                        </div>
+
+                        <!-- Category 2: Home & Navigation -->
+                        <div class="category-card" data-category="home">
+                            <div class="category-header">
+                                <h3>HOME & NAVIGATION</h3>
+                            </div>
+                            <ul class="screen-links">
+                                <li data-index="6"><span>Home Dashboard</span> <span class="arrow">→</span></li>
+                                <li data-index="7"><span>Navigation UI</span> <span class="arrow">→</span></li>
+                                <li data-index="8"><span>Notifications Screen</span> <span class="arrow">→</span></li>
+                                <li data-index="9"><span>Search Screen</span> <span class="arrow">→</span></li>
+                                <li data-index="10"><span>AI Chat Assistant</span> <span class="arrow">→</span></li>
+                            </ul>
+                        </div>
+
+                        <!-- Category 3: Face Scanning Flow -->
+                        <div class="category-card" data-category="scan">
+                            <div class="category-header">
+                                <h3>FACE SCANNING FLOW</h3>
+                            </div>
+                            <ul class="screen-links">
+                                <li data-index="11"><span>Camera Permission</span> <span class="arrow">→</span></li>
+                                <li data-index="12"><span>Face Scan (Live Grid)</span> <span class="arrow">→</span></li>
+                                <li data-index="13"><span>Face Alignment Guide</span> <span class="arrow">→</span></li>
+                                <li data-index="14"><span>Scanning Animation</span> <span class="arrow">→</span></li>
+                                <li data-index="15"><span>Upload Image Screen</span> <span class="arrow">→</span></li>
+                                <li data-index="16"><span>Retake / Confirm Image</span> <span class="arrow">→</span></li>
+                                <li data-index="17"><span>Scan Progress</span> <span class="arrow">→</span></li>
+                                <li data-index="18"><span>Scan Success Screen</span> <span class="arrow">→</span></li>
+                            </ul>
+                        </div>
+
+                        <!-- Category 4: AI Analysis Results -->
+                        <div class="category-card" data-category="results">
+                            <div class="category-header">
+                                <h3>AI ANALYSIS RESULTS</h3>
+                            </div>
+                            <ul class="screen-links">
+                                <li data-index="19"><span>Skin Type Result</span> <span class="arrow">→</span></li>
+                                <li data-index="20"><span>Skin Tone Detection</span> <span class="arrow">→</span></li>
+                                <li data-index="21"><span>Face Shape Detection</span> <span class="arrow">→</span></li>
+                                <li data-index="22"><span>Facial Features Breakdown</span> <span class="arrow">→</span></li>
+                                <li data-index="23"><span>AI Confidence Score</span> <span class="arrow">→</span></li>
+                                <li data-index="24"><span>Summary Report</span> <span class="arrow">→</span></li>
+                                <li data-index="25"><span>Compare Before/After Slider</span> <span class="arrow">→</span></li>
+                            </ul>
+                        </div>
+
+                        <!-- Category 5: Makeup Recommendation -->
+                        <div class="category-card" data-category="makeup">
+                            <div class="category-header">
+                                <h3>MAKEUP RECOMMENDATION</h3>
+                            </div>
+                            <ul class="screen-links">
+                                <li data-index="26"><span>Makeup Overview</span> <span class="arrow">→</span></li>
+                                <li data-index="27"><span>Lipstick Shades Selector</span> <span class="arrow">→</span></li>
+                                <li data-index="28"><span>Foundation Matching</span> <span class="arrow">→</span></li>
+                                <li data-index="29"><span>Eye Makeup Styles</span> <span class="arrow">→</span></li>
+                                <li data-index="30"><span>Full Makeup Preview</span> <span class="arrow">→</span></li>
+                                <li data-index="31"><span>Save Makeup Look</span> <span class="arrow">→</span></li>
+                            </ul>
+                        </div>
+
+                        <!-- Category 6: Skincare Recommendation -->
+                        <div class="category-card" data-category="skincare">
+                            <div class="category-header">
+                                <h3>SKINCARE RECOMMENDATION</h3>
+                            </div>
+                            <ul class="screen-links">
+                                <li data-index="32"><span>Skincare Routine</span> <span class="arrow">→</span></li>
+                                <li data-index="33"><span>Product Suggestions</span> <span class="arrow">→</span></li>
+                                <li data-index="34"><span>Ingredient Recommendation</span> <span class="arrow">→</span></li>
+                                <li data-index="35"><span>Skin Improvement Tips</span> <span class="arrow">→</span></li>
+                                <li data-index="36"><span>Progress Tracking Graph</span> <span class="arrow">→</span></li>
+                            </ul>
+                        </div>
+
+                        <!-- Category 7: Hairstyle Recommendation -->
+                        <div class="category-card" data-category="hair">
+                            <div class="category-header">
+                                <h3>HAIRSTYLE RECOMMENDATION</h3>
+                            </div>
+                            <ul class="screen-links">
+                                <li data-index="37"><span>Hairstyle Suggestions</span> <span class="arrow">→</span></li>
+                                <li data-index="38"><span>Hairstyle Preview (Overlay)</span> <span class="arrow">→</span></li>
+                                <li data-index="39"><span>Trending Hairstyles</span> <span class="arrow">→</span></li>
+                                <li data-index="40"><span>Save Hairstyle Screen</span> <span class="arrow">→</span></li>
+                            </ul>
+                        </div>
+
+                        <!-- Category 8: Outfit & Color Analysis -->
+                        <div class="category-card" data-category="outfits">
+                            <div class="category-header">
+                                <h3>OUTFIT & COLOR ANALYSIS</h3>
+                            </div>
+                            <ul class="screen-links">
+                                <li data-index="41"><span>Outfit Color Palette</span> <span class="arrow">→</span></li>
+                                <li data-index="42"><span>Outfit Recommendations</span> <span class="arrow">→</span></li>
+                                <li data-index="43"><span>Seasonal Fashion Ideas</span> <span class="arrow">→</span></li>
+                                <li data-index="44"><span>Mix & Match Workboard</span> <span class="arrow">→</span></li>
+                                <li data-index="45"><span>Outfit Preview Screen</span> <span class="arrow">→</span></li>
+                            </ul>
+                        </div>
+
+                        <!-- Category 9: User Profile & Settings -->
+                        <div class="category-card" data-category="profile">
+                            <div class="category-header">
+                                <h3>PROFILE & SETTINGS</h3>
+                            </div>
+                            <ul class="screen-links">
+                                <li data-index="46"><span>Profile Screen</span> <span class="arrow">→</span></li>
+                                <li data-index="47"><span>Saved Looks Screen</span> <span class="arrow">→</span></li>
+                                <li data-index="48"><span>Settings Screen</span> <span class="arrow">→</span></li>
+                                <li data-index="49"><span>Edit Preferences Screen</span> <span class="arrow">→</span></li>
+                                <li data-index="50"><span>Subscription / Premium VIP</span> <span class="arrow">→</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Content: Design System Tokens -->
+                <div class="tab-pane" id="design-tab">
+                    <div class="design-system-panel">
+                        <h2>Design Tokens</h2>
+                        <p class="section-desc">Consistent brand foundations used across all web views.</p>
+
+                        <h3>Color System</h3>
+                        <div class="color-palette-grid">
+                            <div class="color-token" style="--token-color: #FCFAF7; color: #121216;">
+                                <div class="color-swatch"></div>
+                                <div class="color-info">
+                                    <span>Linen (BG)</span>
+                                    <code>#FCFAF7</code>
+                                </div>
+                            </div>
+                            <div class="color-token" style="--token-color: #FFF4F2; color: #121216;">
+                                <div class="color-swatch"></div>
+                                <div class="color-info">
+                                    <span>Blush (Card)</span>
+                                    <code>#FFF4F2</code>
+                                </div>
+                            </div>
+                            <div class="color-token" style="--token-color: #DDB7AB; color: #fff;">
+                                <div class="color-swatch"></div>
+                                <div class="color-info">
+                                    <span>Rose Pastel</span>
+                                    <code>#DDB7AB</code>
+                                </div>
+                            </div>
+                            <div class="color-token" style="--token-color: #E3C2D1; color: #fff;">
+                                <div class="color-swatch"></div>
+                                <div class="color-info">
+                                    <span>Lavender</span>
+                                    <code>#E3C2D1</code>
+                                </div>
+                            </div>
+                            <div class="color-token" style="--token-color: #DFB76C; color: #fff;">
+                                <div class="color-swatch"></div>
+                                <div class="color-info">
+                                    <span>Gold Accent</span>
+                                    <code>#DFB76C</code>
+                                </div>
+                            </div>
+                            <div class="color-token" style="--token-color: #121216; color: #fff;">
+                                <div class="color-swatch"></div>
+                                <div class="color-info">
+                                    <span>Charcoal Dark</span>
+                                    <code>#121216</code>
+                                </div>
+                            </div>
+                            <div class="color-token" style="--token-color: #B78BFF; color: #fff;">
+                                <div class="color-swatch"></div>
+                                <div class="color-info">
+                                    <span>AI Scan Purple</span>
+                                    <code>#B78BFF</code>
+                                </div>
+                            </div>
+                            <div class="color-token" style="--token-color: #78E0A0; color: #121216;">
+                                <div class="color-swatch"></div>
+                                <div class="color-info">
+                                    <span>Glow Emerald</span>
+                                    <code>#78E0A0</code>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>Typography Scale</h3>
+                        <div class="typography-spec">
+                            <div class="typo-row">
+                                <span class="typo-label">Brand Heading (Serif)</span>
+                                <h1 class="brand-font" style="margin: 0; font-size: 24px;">Elegant Portrait</h1>
+                                <code>DM Serif Display / 24px</code>
+                            </div>
+                            <div class="typo-row">
+                                <span class="typo-label">Screen Title</span>
+                                <h2 style="margin: 0; font-size: 20px; font-weight: 600;">Intelligent Analysis</h2>
+                                <code>Outfit SemiBold / 20px</code>
+                            </div>
+                            <div class="typo-row">
+                                <span class="typo-label">Card Subtitle</span>
+                                <h4 style="margin: 0; font-size: 14px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gold-accent);">Oily T-Zone</h4>
+                                <code>Outfit Medium / 14px / Caps</code>
+                            </div>
+                            <div class="typo-row">
+                                <span class="typo-label">Body Text</span>
+                                <p style="margin: 0; font-size: 13px; color: var(--text-secondary); line-height: 1.5;">Apply a gentle foaming cleanser daily...</p>
+                                <code>Outfit Light / 13px / 1.5 line-height</code>
+                            </div>
+                        </div>
+
+                        <h3>Glassmorphic Cards</h3>
+                        <div class="glass-spec-showcase">
+                            <div class="premium-glass-card">
+                                <h4>Interactive Card Spec</h4>
+                                <p>Blur: 12px | Opacity: 8% | Border: 1px Solid Alpha 12%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Content: AI Configuration Sandbox -->
+                <div class="tab-pane" id="sandbox-tab">
+                    <div class="sandbox-panel">
+                        <h2>AI Simulator Variables</h2>
+                        <p class="section-desc">Change these inputs to modify the data feed rendered dynamically on the desktop pages.</p>
+
+                        <div class="config-group">
+                            <label for="sim-skin-type">Detected Skin Type</label>
+                            <select id="sim-skin-type">
+                                <option value="Combination (Oily T-Zone)">Combination (Oily T-Zone)</option>
+                                <option value="Dry & Flaky">Dry & Sensitive</option>
+                                <option value="Oily & Acne-Prone">Oily & Acne-Prone</option>
+                                <option value="Normal / Balanced">Normal / Balanced</option>
+                            </select>
+                        </div>
+
+                        <div class="config-group">
+                            <label for="sim-skin-tone">Skin Tone (Hex Color)</label>
+                            <div class="color-picker-row">
+                                <input type="color" id="sim-skin-tone" value="#E8C4A0">
+                                <span id="sim-skin-tone-label">Warm Beige (#E8C4A0)</span>
+                            </div>
+                        </div>
+
+                        <div class="config-group">
+                            <label for="sim-face-shape">Detected Face Shape</label>
+                            <select id="sim-face-shape">
+                                <option value="Oval">Oval Shape</option>
+                                <option value="Heart">Heart Shape</option>
+                                <option value="Square">Square Shape</option>
+                                <option value="Round">Round Shape</option>
+                            </select>
+                        </div>
+
+                        <div class="config-group">
+                            <label for="sim-user-avatar">User Photo / Avatar</label>
+                            <select id="sim-user-avatar">
+                                <option value="classic-female">Default Portrait (Female)</option>
+                                <option value="classic-male">Default Portrait (Male)</option>
+                                <option value="webcam">Webcam Capture (If Allowed)</option>
+                            </select>
+                        </div>
+
+                        <div class="config-group">
+                            <label for="sim-lipstick-color">Recommended Lipstick Shade</label>
+                            <input type="color" id="sim-lipstick-color" value="#E25858">
+                        </div>
+
+                        <div class="config-group">
+                            <label for="sim-confidence">AI Analysis Confidence</label>
+                            <input type="range" id="sim-confidence" min="80" max="100" value="96" step="1">
+                            <div class="range-value"><span id="sim-confidence-val">96</span>%</div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <strong>Interactive Simulation</strong>: Changing these variables will immediately adapt the content of the results dashboard, matching foundation, color analysis, and product matches on the viewport!
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Floating Glassmorphic Prototype HUD Controller -->
+        <footer class="prototype-hud">
+            <button class="hud-btn" id="prev-screen-btn">◀ Prev</button>
+            <div class="hud-info">
+                <span class="hud-counter"><span id="screen-current-num">01</span> / 50</span>
+                <span class="hud-divider">|</span>
+                <span class="hud-active-badge" id="current-screen-badge">1. Splash Screen</span>
+            </div>
+            <button class="hud-btn" id="next-screen-btn">Next ▶</button>
+            <span class="hud-divider">|</span>
+            <button class="hud-btn" id="theme-toggle-btn">☀ Light Mode</button>
+            <button class="hud-btn btn-primary" id="toggle-sidebar-btn">⚙ Review Panel</button>
+        </footer>
+    </div>
+
+    <!-- Application Script -->
+    <script src="app.js"></script>
+</body>
+</html>
