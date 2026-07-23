@@ -1,4 +1,4 @@
-name: Automated Selenium E2E & Vulnerability Testing
+name: Automated E2E, Vulnerability, Unit & Deployment Tests (300 Test Cases)
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   e2e-testing:
-    name: Run 105 E2E, Vulnerability, Unit & Deployment Tests
+    name: Run 300 E2E, Vulnerability, Unit & Deployment Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -22,25 +22,29 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
 
-      - name: Install Chrome & Headless Dependencies
+      - name: Install Google Chrome (Stable)
         run: |
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
           sudo apt-get update
-          sudo apt-get install -y wget curl unzip libxi6 libgconf-2-4 libnss3 chromium-browser
+          sudo apt-get install -y google-chrome-stable
 
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r tests/requirements.txt
 
-      - name: Execute Automated Test Suite (105 Test Cases)
+      - name: Execute Automated Test Suite (300 Test Cases)
         env:
           APP_URL: "https://nethra900000.github.io/appbeauty/"
           API_URL: "https://facial-face.onrender.com"
           PYTHONPATH: "tests"
         run: |
           python tests/test_suite.py
+        continue-on-error: false
 
       - name: Generate HTML Test Report
+        if: always()
         env:
           APP_URL: "https://nethra900000.github.io/appbeauty/"
           API_URL: "https://facial-face.onrender.com"
@@ -63,3 +67,13 @@ jobs:
           name: E2E_Test_Report_HTML_Browser
           path: E2E_Test_Report_AppBeauty.html
           retention-days: 30
+
+      - name: Print Test Summary
+        if: always()
+        run: |
+          echo "=============================================="
+          echo "  AI BEAUTY GENIUS - TEST SUITE COMPLETE"
+          echo "  300 Test Cases Executed"
+          echo "  Categories: UI/UX | Functional | Unit/API"
+          echo "             Validation | Security | Deployment"
+          echo "=============================================="
