@@ -1,4 +1,4 @@
-name: Automated Selenium E2E & Vulnerability Testing
+name: solenium test for web app
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   e2e-testing:
-    name: Run 300 E2E, Vulnerability, Unit & Deployment Tests
+    name: web app solenium testing
     runs-on: ubuntu-latest
 
     steps:
